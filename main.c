@@ -1,5 +1,5 @@
 // Collaborators:
-// Hardik Aggawal (2021CSB1173)
+// Hardik Aggarwal (2021CSB1173)
 // Harshit Kumar Ravi (2021CSB1093)
 // Gyanendra Mani (2021CSB1090)
 
