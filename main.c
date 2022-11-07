@@ -1,18 +1,18 @@
-
 // Collaborators:
 // Hardik Aggawal (2021CSB1173)
-// Harsht Kumar Ravi (2021CSB1093)
+// Harshit Kumar Ravi (2021CSB1093)
 // Gyanendra Mani (2021CSB1090)
 
 // Teaching Assistant: Vinay Kumar Sajja
-
 
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <limits.h>
 
+/* Structure definition of the fibonacci heap node */
 
 typedef struct node
 {
@@ -26,12 +26,21 @@ typedef struct node
     bool found;
 } node;
 
+
+
+/* Structure definition of the fibonacci heap */
+
 typedef struct heap
 {
     node *min;
     int n;
 } heap;
 
+
+
+
+/*This function makes a fibonacci heap pointer dynamically 
+  and assign values to its variables */
 
 heap *MAKE_HEAP()
 {
@@ -40,6 +49,11 @@ heap *MAKE_HEAP()
     temp->n=0;
     return temp;
 }
+
+
+
+/*This function allocate memory of the node dynamically 
+  and assign values to its variables*/
 
 node *allocateMemoryNode()
 {
@@ -51,6 +65,11 @@ node *allocateMemoryNode()
     temp->found=false;
     return temp;
 }
+
+
+
+/*This function insert the node in the root list 
+  which is represented as doubly linked list*/
 
 void insert(heap* fibbHeap,node* newNode)
 {
@@ -77,6 +96,10 @@ void insert(heap* fibbHeap,node* newNode)
     }
 }
 
+
+
+/*This function insert a node in the fibonacci heap */
+
 void FIB_HEAP_INSERT(heap* fibHeap,int key)
 {
     node *newNode = allocateMemoryNode();
@@ -86,6 +109,11 @@ void FIB_HEAP_INSERT(heap* fibHeap,int key)
     insert(fibHeap,newNode);
     fibHeap->n=fibHeap->n+1;
 }
+
+
+
+/*This function make a fibonacci heap which is union of two fibonacci heaps (h1 and h2)
+  It also destroys h1 and h2 in the process*/
 
 heap* FIB_HEAP_UNION(heap*h1,heap*h2)
 {
@@ -104,6 +132,10 @@ heap* FIB_HEAP_UNION(heap*h1,heap*h2)
     return temp;
 }
 
+
+
+/*This function is used to cut the node from its parent and insert it in the root list*/
+
 void CUT(heap* h,node* child,node* parent){
     if(parent->child==child){
         if(child->right==child)
@@ -121,6 +153,11 @@ void CUT(heap* h,node* child,node* parent){
     parent->degree--;
 }
 
+
+
+/*This function recusively cut the child from parent 
+  until the child is an unmarked node or it has no parent*/
+
 void CASCADING_CUT(heap* fibHeap,node* y)
 {
     node* parent=y->parent;
@@ -137,6 +174,9 @@ void CASCADING_CUT(heap* fibHeap,node* y)
     }
 }
 
+
+
+/*This function is used to decrease the key value of a node to a given value*/
 
 void FIB_HEAP_DECREASE_KEY(heap* fibHeap, node* oldNode, int newKey)
 {
@@ -164,6 +204,9 @@ void FIB_HEAP_DECREASE_KEY(heap* fibHeap, node* oldNode, int newKey)
     }
 }
 
+
+
+/* This assists the function CONSOLIDATE in merging same degree root list nodes*/
 
 void FIB_LINK(heap* fibHeap,node* p2, node* p1)
 {
@@ -195,9 +238,17 @@ void FIB_LINK(heap* fibHeap,node* p2, node* p1)
     p2->mark=false;
 }
 
+
+
+/*This function finds the maximum number of nodes in the fibonacci heap*/
+
 int degree(heap*h){
     return (int)(log2(h->n))+1;
 }
+
+
+
+/*This function is used to combine the root list nodes which have same degree */
 
 void CONSOLIDATE(heap* H){
     int k=degree(H);
@@ -243,6 +294,10 @@ void CONSOLIDATE(heap* H){
     }
 }
 
+
+
+/*This function is used to extract and return the node having minimum key value*/
+
 int FIB_HEAP_EXTRACT_MIN(heap* fibHeap)
 {
     if(fibHeap->min!=NULL)
@@ -285,6 +340,8 @@ int FIB_HEAP_EXTRACT_MIN(heap* fibHeap)
 
 
 
+/*This function search for a node having the given key value in the fibonacci heap*/
+
 void search(heap* fibHeap,node* fibHeapNode,int value,int newKey,int *done)
 {
     node *temp=fibHeapNode;
@@ -307,10 +364,18 @@ void search(heap* fibHeap,node* fibHeapNode,int value,int newKey,int *done)
     
 }
 
+
+
+/* This function is used to delete a node from the fibonacci heap */
+
 void FIB_HEAP_DELETE(heap* h,int key,int *done){
     search(h,h->min,key,INT_MIN,done);
     int temp=FIB_HEAP_EXTRACT_MIN(h);
 }
+
+
+
+/* This function print the fibonacci heap with its nodes and their depth */
 
 void PRINT_HEAP(node* n,char* s,int level){
     node*temp=n;
@@ -324,11 +389,16 @@ void PRINT_HEAP(node* n,char* s,int level){
     }while(temp!=n);
 }
 
+
+
 int main(){
     heap** fibheap;
-    printf("Enter the number of Fibonacci heaps to create:\n==> ");
     int n;
-    scanf("%d",&n);
+    do{
+        printf("Enter the number of Fibonacci heaps to create:\n==> ");
+        scanf("%d",&n);
+    }
+    while(n<1);
     fibheap=(heap**)malloc((n+1)*sizeof(heap*));
     for(int i=1;i<=n;i++)
         fibheap[i]=MAKE_HEAP();
@@ -337,7 +407,7 @@ int main(){
     int ref=-1;
     do{
         printf("\nPlease enter heap reference number to continue operations\nEnter -1 to exit\n");
-        printf("Enter your choice:\n==> ");
+        printf("Enter heap reference number:\n==> ");
         scanf("%d",&ref);
         int choice = 8;
         if(ref>0 && ref<=n){
